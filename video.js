@@ -1,38 +1,30 @@
 var w = window, player;
+// 再生したいyoutubeの動画id
+var vid = 'SlRfwbD2riE';
 
-  // ここはドキュメントにある通り
-  var tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  var firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  w.onYouTubeIframeAPIReady = function() {
-    player = new YT.Player('video', { // 置き換えるHTML要素のid
-      height: '450',
-      width: '800',
-      videoId: 'SlRfwbD2riE',  // 再生したいvideoのid
-      playerVars: {
-					      rel: 0,
-      					showinfo: 0,
-                autoplay: 1, // 自動再生するかどうか設定
-                loop: 1
-            },
-      events: {
-        // プレイヤーの準備が出来た時に何かしたい場合
-        onReady: function() {
-        },
-        // プレイヤーの状態が変わった時に何かしたい場合
-        onStateChange: function(e) {
-          // 再生が終わった時に何かしたい場合
-          if ( e.data == YT.PlayerState.ENDED ) {
-		        //alert("end");
-           	e.target.playVideo();
-          }
-        },
-        // エラーが起きた時(埋め込めない動画を指定したときなど)
-        onError: function() {
+w.onYouTubeIframeAPIReady = function() {
+  player = new YT.Player('video', { // 置き換えるHTML要素のid
+    videoId: vid,
+    playerVars: {
+      rel: 0, //動画再生後の関連動画を表示しない
+      showinfo: 0, //動画再生前に動画情報を表示しない
+      autoplay: 1, //動画準備後に自動再生
+      loop: 1 //ループ設定
+    },
+    events: {
+      onStateChange: function(e) {
+        // 再生終了後
+        if ( e.data == YT.PlayerState.ENDED ) {
+	        //再生
+         	e.target.playVideo();
         }
       }
-    });
-    player.setLoop(true);
-  };
+    }
+  });
+  player.setLoop(true);
+};
